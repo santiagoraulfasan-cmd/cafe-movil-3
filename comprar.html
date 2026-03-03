@@ -639,6 +639,22 @@
             color: var(--gold);
             letter-spacing: 1px;
         }
+        .countdown-banner-cta {
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 20px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .countdown-banner-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
         .countdown-banner-close {
             background: none;
             border: none;
@@ -665,6 +681,9 @@
             .countdown-timer {
                 font-size: 14px;
                 padding: 4px 10px;
+            }
+            .countdown-banner-cta {
+                display: none;
             }
         }
 
@@ -912,6 +931,7 @@
             <i data-lucide="clock"></i>
         </div>
         <span class="countdown-banner-text">Tu <strong>10% OFF</strong> expira en <span class="countdown-timer" id="countdownTimer">10:00</span></span>
+        <a href="#checkoutForm" class="countdown-banner-cta" onclick="document.getElementById('checkoutForm').scrollIntoView({behavior:'smooth',block:'start'});return false;">COMPRAR AHORA</a>
         <button class="countdown-banner-close" id="countdownClose" aria-label="Cerrar">
             <i data-lucide="x" style="width:14px;height:14px"></i>
         </button>
