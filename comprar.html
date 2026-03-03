@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprar | Café Leblon — Café Premium Brasileño</title>
+    <meta name="description" content="Completá tu compra de Café Leblon. Café premium brasileño 100% Arábica de Minas Gerais.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-2: #1A1A1A;
+            --border: #2A2A2A;
+            --gold: #C9A962;
+            --gold-dark: #A8893F;
+            --gold-light: #D4B97A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8B0A0;
+            --text-muted: #6A6A6A;
+            --cream: #F5E6D0;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --error: #E74C3C;
+            --success: #27AE60;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; cursor: pointer; font-family: inherit; }
+
+        /* ═══ Grain ═══ */
+        .grain {
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ═══ Animations ═══ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(201,169,98,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(201,169,98,0); }
+        }
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s var(--ease) forwards;
+            opacity: 0;
+        }
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+        .animate-delay-5 { animation-delay: 0.5s; }
+
+        /* ═══ Navigation ═══ */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-logo-mark {
+            font-family: var(--font-display);
+            font-size: 24px; font-weight: 600;
+            color: var(--gold);
+        }
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-size: 16px; font-weight: 600;
+            letter-spacing: 3px; color: var(--text-primary);
+        }
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        .nav-back:hover { color: var(--gold); }
+        .nav-back i { width: 16px; height: 16px; }
+
+        /* ═══ Main Layout ═══ */
+        .checkout-wrapper {
+            flex: 1;
+            padding: 80px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* ═══ Page Header ═══ */
+        .checkout-header {
+            text-align: center;
+            padding: 32px 0 8px;
+        }
+        .checkout-header-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px; font-weight: 500;
+            letter-spacing: 3px; color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .checkout-header-label .dot {
+            width: 6px; height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease infinite;
+        }
+        .checkout-header h1 {
+            font-family: var(--font-display);
+            font-size: 36px; font-weight: 500;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .checkout-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ═══ Progress Steps ═══ */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: 0 20px;
+        }
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            transition: color 0.4s ease;
+        }
+        .progress-step.active { color: var(--gold); }
+        .progress-step.completed { color: var(--success); }
+        .progress-step-num {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            transition: all 0.4s ease;
+        }
+        .progress-step.active .progress-step-num {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: var(--bg);
+        }
+        .progress-step.completed .progress-step-num {
+            border-color: var(--success);
+            background: var(--success);
+            color: #fff;
+        }
+        .progress-line {
+            width: 40px; height: 1px;
+            background: var(--border);
+            margin: 0 12px;
+            transition: background 0.4s ease;
+        }
+        .progress-line.active { background: var(--gold); }
+
+        /* ═══ Content Grid ═══ */
+        .checkout-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ═══ Product Summary Card ═══ */
+        .order-summary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 24px;
+            order: -1;
+        }
+        .order-summary h3 {
+            font-family: var(--font-display);
+            font-size: 22px; font-weight: 500;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .order-item {
+            display: flex;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .order-item-image {
+            width: 80px; height: 80px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+        .order-item-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .order-item-details { flex: 1; }
+        .order-item-name {
+            font-family: var(--font-display);
+            font-size: 18px; font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .order-item-origin {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .order-item-price {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        .order-qty {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .order-qty-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .order-qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .order-qty-btn {
+            width: 32px; height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .order-qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .order-qty-value {
+            font-size: 15px;
+            font-weight: 500;
+            width: 24px;
+            text-align: center;
+        }
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .order-total-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .order-total-price {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        .order-shipping {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 8px;
+        }
+        .order-trust {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .order-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .order-trust-item i { color: var(--gold); width: 14px; height: 14px; flex-shrink: 0; }
+
+        /* ═══ Form Card ═══ */
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 28px 24px;
+        }
+        .form-card h3 {
+            font-family: var(--font-display);
+            font-size: 24px; font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .form-card-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        .form-input {
+            height: 52px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 0 16px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.4s ease;
+        }
+        .form-input::placeholder { color: var(--text-muted); }
+        .form-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201,169,98,0.1);
+        }
+        .form-input.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(231,76,60,0.1);
+        }
+        .form-input.valid {
+            border-color: var(--success);
+        }
+        .form-error {
+            font-size: 12px;
+            color: var(--error);
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .form-error.visible { display: block; }
+
+        .form-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 8px 0;
+        }
+
+        .form-submit {
+            width: 100%;
+            height: 56px;
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.4s var(--ease);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .form-submit::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        .form-submit:hover::before { left: 100%; }
+        .form-submit:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(201,169,98,0.3);
+        }
+        .form-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .form-submit:disabled:hover { box-shadow: none; }
+        .form-submit:disabled::before { display: none; }
+        .form-submit i { width: 18px; height: 18px; }
+
+        .form-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+        .form-secure i { width: 14px; height: 14px; color: var(--gold); }
+
+        /* ═══ Success State ═══ */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-overlay.active { display: flex; }
+        .success-card {
+            background: var(--surface);
+            border: 1px solid var(--gold);
+            padding: 48px 32px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.6s var(--ease);
+        }
+        .success-check {
+            width: 64px; height: 64px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .success-check i { color: var(--bg); width: 32px; height: 32px; }
+        .success-card h2 {
+            font-family: var(--font-display);
+            font-size: 32px; font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .success-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .success-detail {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .success-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+        .success-detail-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+        .success-detail-label { color: var(--text-muted); }
+        .success-detail-value { color: var(--text-primary); font-weight: 500; }
+        .success-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px 36px;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+        }
+        .success-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+        /* ═══ Footer Mini ═══ */
+        .footer-mini {
+            border-top: 1px solid var(--border);
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+        }
+        .footer-mini-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-mini-logo i { color: var(--gold); width: 18px; height: 18px; }
+        .footer-mini-logo span {
+            font-family: var(--font-display);
+            font-size: 16px; font-weight: 600;
+            letter-spacing: 3px; color: var(--text-primary);
+        }
+        .footer-mini-text {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .footer-mini-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-mini-links a {
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        .footer-mini-links a:hover { color: var(--text-secondary); }
+
+        /* ═══ Tablet ═══ */
+        @media (min-width: 768px) {
+            .checkout-wrapper { padding: 100px 40px 48px; gap: 40px; }
+            .checkout-header h1 { font-size: 44px; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-group.full-width { grid-column: 1 / -1; }
+            .checkout-content {
+                flex-direction: row;
+                gap: 32px;
+            }
+            .form-card { flex: 1; }
+            .order-summary {
+                width: 360px;
+                flex-shrink: 0;
+                order: 0;
+                position: sticky;
+                top: 80px;
+                align-self: flex-start;
+            }
+            .nav-inner { padding: 18px 40px; }
+        }
+
+        /* ═══ Desktop ═══ */
+        @media (min-width: 1024px) {
+            .checkout-wrapper { padding: 100px 60px 56px; max-width: 1200px; }
+            .checkout-header h1 { font-size: 48px; }
+            .nav-inner { padding: 20px 56px; }
+            .order-summary { width: 400px; }
+            .form-card { padding: 36px 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grain"></div>
+
+    <!-- ═══ Navigation ═══ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-mark">L</span>
+                <span class="nav-logo-text">LEBLON</span>
+            </a>
+            <a href="index.html" class="nav-back">
+                <i data-lucide="arrow-left"></i>
+                <span>Volver al inicio</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ═══ Main ═══ -->
+    <div class="checkout-wrapper">
+
+        <!-- Header -->
+        <div class="checkout-header animate-in">
+            <div class="checkout-header-label">
+                <span class="dot"></span>
+                <span>FINALIZAR COMPRA</span>
+            </div>
+            <h1>Tu Pedido Leblon</h1>
+            <p>Completá tus datos para recibir el mejor café brasileño en tu puerta</p>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-steps animate-in animate-delay-1">
+            <div class="progress-step completed" id="step1">
+                <span class="progress-step-num"><i data-lucide="check" style="width:12px;height:12px"></i></span>
+                <span>Producto</span>
+            </div>
+            <div class="progress-line active"></div>
+            <div class="progress-step active" id="step2">
+                <span class="progress-step-num">2</span>
+                <span>Datos</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step3">
+                <span class="progress-step-num">3</span>
+                <span>Confirmación</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="checkout-content">
+
+            <!-- Form -->
+            <div class="form-card animate-in animate-delay-2">
+                <h3>Datos Personales</h3>
+                <p class="form-card-sub">Todos los campos son obligatorios</p>
+
+                <form id="checkoutForm" novalidate>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="nombre">Nombre</label>
+                            <input type="text" id="nombre" class="form-input" placeholder="Tu nombre" required minlength="2" autocomplete="given-name">
+                            <span class="form-error" id="errorNombre">Ingresá tu nombre</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="apellido">Apellido</label>
+                            <input type="text" id="apellido" class="form-input" placeholder="Tu apellido" required minlength="2" autocomplete="family-name">
+                            <span class="form-error" id="errorApellido">Ingresá tu apellido</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="dni">DNI</label>
+                            <input type="text" id="dni" class="form-input" placeholder="12.345.678" required pattern="[\d.]{7,11}" inputmode="numeric" autocomplete="off">
+                            <span class="form-error" id="errorDni">Ingresá un DNI válido (solo números)</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="celular">Celular</label>
+                            <input type="tel" id="celular" class="form-input" placeholder="+54 11 1234-5678" required minlength="8" autocomplete="tel">
+                            <span class="form-error" id="errorCelular">Ingresá un número de celular válido</span>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" id="email" class="form-input" placeholder="tu@email.com" required autocomplete="email">
+                            <span class="form-error" id="errorEmail">Ingresá un email válido</span>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <button type="submit" class="form-submit" id="submitBtn">
+                        <span>Confirmar Pedido</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+
+                    <div class="form-secure">
+                        <i data-lucide="shield-check"></i>
+                        <span>Compra segura — Tus datos están protegidos</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary animate-in animate-delay-3">
+                <h3>Tu Selección</h3>
+
+                <div class="order-item" id="orderItem">
+                    <div class="order-item-image">
+                        <img id="productImage" src="images/product-reserva.png" alt="Producto">
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name" id="productName">Leblon Reserva Especial</div>
+                        <div class="order-item-origin">ORIGEN: BRASIL — MINAS GERAIS</div>
+                        <div class="order-item-price">$40.000</div>
+                    </div>
+                </div>
+
+                <div class="order-qty">
+                    <span class="order-qty-label">Cantidad:</span>
+                    <div class="order-qty-controls">
+                        <button type="button" class="order-qty-btn" id="qtyMinus">−</button>
+                        <span class="order-qty-value" id="qtyValue">1</span>
+                        <button type="button" class="order-qty-btn" id="qtyPlus">+</button>
+                    </div>
+                </div>
+
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    <span class="order-total-price" id="totalPrice">$40.000</span>
+                </div>
+                <div class="order-shipping" id="shippingMsg">Envío gratis en compras +$15.000</div>
+
+                <div class="order-trust">
+                    <div class="order-trust-item">
+                        <i data-lucide="truck"></i>
+                        <span>Envío gratis a todo el país</span>
+                    </div>
+                    <div class="order-trust-item">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>Devolución dentro de 30 días</span>
+                    </div>
+                    <div class="order-trust-item">
+                        <i data-lucide="award"></i>
+                        <span>Specialty Grade — 86+ puntos SCA</span>
+                    </div>
+                    <div class="order-trust-item">
+                        <i data-lucide="leaf"></i>
+                        <span>100% Arábica — Origen único</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-card">
+            <div class="success-check">
+                <i data-lucide="check"></i>
+            </div>
+            <h2>¡Pedido Confirmado!</h2>
+            <p>Gracias por elegir Café Leblon. Recibirás un email de confirmación con los detalles de tu pedido.</p>
+            <div class="success-detail" id="successDetails"></div>
+            <a href="index.html" class="success-btn">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <!-- Footer Mini -->
+    <div class="footer-mini">
+        <div class="footer-mini-logo">
+            <i data-lucide="coffee"></i>
+            <span>LEBLON</span>
+        </div>
+        <span class="footer-mini-text">&copy; 2026 Café Leblon. Todos los derechos reservados.</span>
+        <div class="footer-mini-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <a href="#">Envíos</a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        /* ═══ Product mapping from URL params ═══ */
+        const products = {
+            'reserva-especial': { name: 'Leblon Reserva Especial', image: 'images/product-reserva.png' },
+            'clasico-intenso': { name: 'Leblon Clásico Intenso', image: 'images/product-clasico.png' },
+            'single-origin': { name: 'Leblon Single Origin', image: 'images/product-single.png' }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const productKey = params.get('producto');
+        if (productKey && products[productKey]) {
+            document.getElementById('productName').textContent = products[productKey].name;
+            document.getElementById('productImage').src = products[productKey].image;
+            document.getElementById('productImage').alt = products[productKey].name;
+        }
+
+        /* ═══ Quantity controls ═══ */
+        let qty = 1;
+        const PRICE = 40000;
+        const qtyValue = document.getElementById('qtyValue');
+        const totalPrice = document.getElementById('totalPrice');
+
+        function updateTotal() {
+            const total = qty * PRICE;
+            totalPrice.textContent = '$' + total.toLocaleString('es-AR');
+        }
+
+        document.getElementById('qtyMinus').addEventListener('click', () => {
+            if (qty > 1) { qty--; qtyValue.textContent = qty; updateTotal(); }
+        });
+        document.getElementById('qtyPlus').addEventListener('click', () => {
+            if (qty < 10) { qty++; qtyValue.textContent = qty; updateTotal(); }
+        });
+
+        /* ═══ Form validation ═══ */
+        const form = document.getElementById('checkoutForm');
+        const fields = {
+            nombre: { el: document.getElementById('nombre'), error: document.getElementById('errorNombre') },
+            apellido: { el: document.getElementById('apellido'), error: document.getElementById('errorApellido') },
+            dni: { el: document.getElementById('dni'), error: document.getElementById('errorDni') },
+            celular: { el: document.getElementById('celular'), error: document.getElementById('errorCelular') },
+            email: { el: document.getElementById('email'), error: document.getElementById('errorEmail') }
+        };
+
+        function validateField(key) {
+            const f = fields[key];
+            let valid = false;
+
+            switch (key) {
+                case 'nombre':
+                case 'apellido':
+                    valid = f.el.value.trim().length >= 2;
+                    break;
+                case 'dni':
+                    const dniClean = f.el.value.replace(/\./g, '');
+                    valid = /^\d{7,8}$/.test(dniClean);
+                    break;
+                case 'celular':
+                    const celClean = f.el.value.replace(/[\s\-\+\(\)]/g, '');
+                    valid = /^\d{8,15}$/.test(celClean);
+                    break;
+                case 'email':
+                    valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.el.value);
+                    break;
+            }
+
+            f.el.classList.toggle('error', !valid && f.el.value.length > 0);
+            f.el.classList.toggle('valid', valid);
+            f.error.classList.toggle('visible', !valid && f.el.value.length > 0);
+            return valid;
+        }
+
+        /* Real-time validation on blur */
+        Object.keys(fields).forEach(key => {
+            fields[key].el.addEventListener('blur', () => validateField(key));
+            fields[key].el.addEventListener('input', () => {
+                if (fields[key].el.classList.contains('error')) validateField(key);
+            });
+        });
+
+        /* DNI auto-format */
+        fields.dni.el.addEventListener('input', function() {
+            let val = this.value.replace(/\D/g, '');
+            if (val.length > 8) val = val.slice(0, 8);
+            if (val.length > 5) val = val.slice(0, 2) + '.' + val.slice(2, 5) + '.' + val.slice(5);
+            else if (val.length > 2) val = val.slice(0, 2) + '.' + val.slice(2);
+            this.value = val;
+        });
+
+        /* Form submit */
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let allValid = true;
+            Object.keys(fields).forEach(key => {
+                if (!validateField(key)) allValid = false;
+            });
+
+            if (!allValid) {
+                const firstError = form.querySelector('.form-input.error');
+                if (firstError) firstError.focus();
+                return;
+            }
+
+            /* Show success */
+            const overlay = document.getElementById('successOverlay');
+            const details = document.getElementById('successDetails');
+            details.innerHTML =
+                '<div class="success-detail-row"><span class="success-detail-label">Producto</span><span class="success-detail-value">' + document.getElementById('productName').textContent + '</span></div>' +
+                '<div class="success-detail-row"><span class="success-detail-label">Cantidad</span><span class="success-detail-value">' + qty + '</span></div>' +
+                '<div class="success-detail-row"><span class="success-detail-label">Total</span><span class="success-detail-value">' + totalPrice.textContent + '</span></div>' +
+                '<div class="success-detail-row"><span class="success-detail-label">Nombre</span><span class="success-detail-value">' + fields.nombre.el.value + ' ' + fields.apellido.el.value + '</span></div>' +
+                '<div class="success-detail-row"><span class="success-detail-label">Email</span><span class="success-detail-value">' + fields.email.el.value + '</span></div>';
+
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            /* Update progress */
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step2').querySelector('.progress-step-num').innerHTML = '<i data-lucide="check" style="width:12px;height:12px"></i>';
+            document.getElementById('step3').classList.add('active');
+            document.querySelectorAll('.progress-line')[1].classList.add('active');
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
