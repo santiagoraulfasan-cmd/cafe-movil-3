@@ -830,6 +830,230 @@
         }
 
         /* ══════════════════════════════════════
+           PURCHASE POP-UP NOTIFICATIONS
+           ══════════════════════════════════════ */
+        .purchase-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: var(--surface);
+            border: 1px solid rgba(201,169,98,0.3);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 9998;
+            max-width: 360px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            transform: translateX(-120%);
+            opacity: 0;
+            transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+        }
+        .purchase-toast.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .purchase-toast-img {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .purchase-toast-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .purchase-toast-content {
+            flex: 1;
+        }
+        .purchase-toast-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .purchase-toast-text strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .purchase-toast-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .purchase-toast-time::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--success, #27AE60);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease infinite;
+        }
+        .purchase-toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            flex-shrink: 0;
+            transition: color 0.3s ease;
+        }
+        .purchase-toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 480px) {
+            .purchase-toast {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+                max-width: none;
+            }
+        }
+
+        /* ══════════════════════════════════════
+           STOCK COUNTER (on product cards)
+           ══════════════════════════════════════ */
+        .product-stock {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+        .product-stock-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            overflow: hidden;
+            position: relative;
+        }
+        .product-stock-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 1s var(--ease);
+        }
+        .product-stock-fill.low {
+            background: #E74C3C;
+        }
+        .product-stock-fill.medium {
+            background: #F39C12;
+        }
+        .product-stock-text {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+        .product-stock-text.low {
+            color: #E74C3C;
+        }
+
+        /* ══════════════════════════════════════
+           COUNTDOWN TIMER BANNER
+           ══════════════════════════════════════ */
+        .countdown-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1206 0%, #2d1f0e 100%);
+            border-top: 1px solid rgba(201,169,98,0.4);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            z-index: 9997;
+            transform: translateY(100%);
+            transition: transform 0.6s var(--ease);
+            flex-wrap: wrap;
+        }
+        .countdown-banner.visible {
+            transform: translateY(0);
+        }
+        .countdown-banner-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+        }
+        .countdown-banner-icon i {
+            width: 20px;
+            height: 20px;
+        }
+        .countdown-banner-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .countdown-banner-text strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .countdown-timer {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201,169,98,0.15);
+            border: 1px solid rgba(201,169,98,0.3);
+            padding: 6px 14px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+        .countdown-banner-cta {
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 20px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .countdown-banner-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+        .countdown-banner-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s ease;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .countdown-banner-close:hover {
+            color: var(--text-primary);
+        }
+        @media (max-width: 600px) {
+            .countdown-banner {
+                padding: 10px 40px 10px 16px;
+                gap: 8px;
+            }
+            .countdown-banner-text {
+                font-size: 12px;
+            }
+            .countdown-timer {
+                font-size: 14px;
+                padding: 4px 10px;
+            }
+            .countdown-banner-cta {
+                display: none;
+            }
+        }
+
+        /* ══════════════════════════════════════
            EXPERIENCE / BENTO — MOBILE BASE
            ══════════════════════════════════════ */
         .experience {
@@ -1645,6 +1869,10 @@
                     <div class="product-card-info">
                         <h3 class="product-card-name">Leblon Reserva Especial</h3>
                         <p class="product-card-desc">Notas de cacao oscuro, caramelo y un sutil toque de nuez. Tostado medio-oscuro con cuerpo pleno y final prolongado.</p>
+                        <div class="product-stock" data-product="reserva-especial">
+                            <div class="product-stock-bar"><div class="product-stock-fill" id="stockFill1"></div></div>
+                            <span class="product-stock-text" id="stockText1"></span>
+                        </div>
                         <div class="product-card-bottom">
                             <div class="product-card-price">
                                 <span class="price-label">250g</span>
@@ -1663,6 +1891,10 @@
                     <div class="product-card-info">
                         <h3 class="product-card-name">Leblon Clásico Intenso</h3>
                         <p class="product-card-desc">Intensidad profunda con notas de chocolate amargo, especias y un retrogusto ahumado. Ideal para quienes buscan carácter.</p>
+                        <div class="product-stock" data-product="clasico-intenso">
+                            <div class="product-stock-bar"><div class="product-stock-fill" id="stockFill2"></div></div>
+                            <span class="product-stock-text" id="stockText2"></span>
+                        </div>
                         <div class="product-card-bottom">
                             <div class="product-card-price">
                                 <span class="price-label">250g</span>
@@ -1681,6 +1913,10 @@
                     <div class="product-card-info">
                         <h3 class="product-card-name">Leblon Single Origin</h3>
                         <p class="product-card-desc">Micro-lote de Minas Gerais. Notas florales, cítricos brillantes y miel silvestre. Un café de complejidad excepcional.</p>
+                        <div class="product-stock" data-product="single-origin">
+                            <div class="product-stock-bar"><div class="product-stock-fill" id="stockFill3"></div></div>
+                            <span class="product-stock-text" id="stockText3"></span>
+                        </div>
                         <div class="product-card-bottom">
                             <div class="product-card-price">
                                 <span class="price-label">200g</span>
@@ -1900,6 +2136,32 @@
         </div>
     </footer>
 
+    <!-- ═══════════════ PURCHASE TOAST ═══════════════ -->
+    <div class="purchase-toast" id="purchaseToast">
+        <div class="purchase-toast-img">
+            <img id="toastImg" src="images/product-reserva.png" alt="">
+        </div>
+        <div class="purchase-toast-content">
+            <div class="purchase-toast-text" id="toastText"></div>
+            <div class="purchase-toast-time" id="toastTime">Hace 2 minutos</div>
+        </div>
+        <button class="purchase-toast-close" id="toastClose" aria-label="Cerrar">
+            <i data-lucide="x" style="width:14px;height:14px"></i>
+        </button>
+    </div>
+
+    <!-- ═══════════════ COUNTDOWN BANNER ═══════════════ -->
+    <div class="countdown-banner" id="countdownBanner">
+        <div class="countdown-banner-icon">
+            <i data-lucide="clock"></i>
+        </div>
+        <span class="countdown-banner-text">Comprá en los próximos <span class="countdown-timer" id="countdownTimer">10:00</span> y obtené <strong>10% OFF</strong></span>
+        <a href="comprar.html" class="countdown-banner-cta">COMPRAR AHORA</a>
+        <button class="countdown-banner-close" id="countdownClose" aria-label="Cerrar">
+            <i data-lucide="x" style="width:14px;height:14px"></i>
+        </button>
+    </div>
+
     <script>
         lucide.createIcons();
 
@@ -2049,6 +2311,179 @@
                 });
             });
         }
+
+        /* ═══ PURCHASE POP-UP NOTIFICATIONS ═══ */
+        (function() {
+            const toast = document.getElementById('purchaseToast');
+            const toastImg = document.getElementById('toastImg');
+            const toastText = document.getElementById('toastText');
+            const toastTime = document.getElementById('toastTime');
+            const toastClose = document.getElementById('toastClose');
+
+            const buyers = [
+                { name: 'María G.', city: 'Buenos Aires' },
+                { name: 'Santiago R.', city: 'Córdoba' },
+                { name: 'Valentina M.', city: 'Rosario' },
+                { name: 'Lucas P.', city: 'Mendoza' },
+                { name: 'Camila S.', city: 'La Plata' },
+                { name: 'Matías D.', city: 'Tucumán' },
+                { name: 'Florencia L.', city: 'Mar del Plata' },
+                { name: 'Nicolás A.', city: 'Salta' },
+                { name: 'Carolina T.', city: 'Santa Fe' },
+                { name: 'Joaquín B.', city: 'Neuquén' },
+                { name: 'Ana R.', city: 'Bahía Blanca' },
+                { name: 'Pedro M.', city: 'San Juan' }
+            ];
+
+            const productsList = [
+                { name: 'Leblon Reserva Especial', img: 'images/product-reserva.png', key: 'reserva-especial' },
+                { name: 'Leblon Clásico Intenso', img: 'images/product-clasico.png', key: 'clasico-intenso' },
+                { name: 'Leblon Single Origin', img: 'images/product-single.png', key: 'single-origin' }
+            ];
+
+            const times = ['Hace 1 minuto', 'Hace 2 minutos', 'Hace 3 minutos', 'Hace 5 minutos', 'Hace pocos segundos'];
+
+            let toastTimeout;
+            function showToast() {
+                const buyer = buyers[Math.floor(Math.random() * buyers.length)];
+                const product = productsList[Math.floor(Math.random() * productsList.length)];
+                const time = times[Math.floor(Math.random() * times.length)];
+
+                toastImg.src = product.img;
+                toastText.innerHTML = '<strong>' + buyer.name + '</strong> de ' + buyer.city + ' compró <strong>' + product.name + '</strong>';
+                toastTime.textContent = time;
+
+                toast.classList.add('visible');
+
+                // Decrease stock for that product
+                decreaseStock(product.key);
+
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('visible');
+                }, 5000);
+            }
+
+            toastClose.addEventListener('click', () => {
+                toast.classList.remove('visible');
+                clearTimeout(toastTimeout);
+            });
+
+            // Show first toast after 8 seconds, then every 25-45 seconds
+            setTimeout(showToast, 8000);
+            setInterval(() => {
+                setTimeout(showToast, Math.random() * 20000);
+            }, 30000);
+        })();
+
+        /* ═══ STOCK COUNTER ═══ */
+        (function() {
+            const stockKey = 'leblon_stock';
+            const stockResetKey = 'leblon_stock_reset';
+
+            // Reset stock every 30 minutes
+            const now = Date.now();
+            const lastReset = parseInt(sessionStorage.getItem(stockResetKey) || '0');
+            if (now - lastReset > 30 * 60 * 1000) {
+                sessionStorage.removeItem(stockKey);
+                sessionStorage.setItem(stockResetKey, now.toString());
+            }
+
+            let stock = JSON.parse(sessionStorage.getItem(stockKey)) || {
+                'reserva-especial': 12,
+                'clasico-intenso': 8,
+                'single-origin': 5
+            };
+
+            function saveStock() {
+                sessionStorage.setItem(stockKey, JSON.stringify(stock));
+            }
+
+            function updateStockUI() {
+                const maxStock = 18;
+                Object.keys(stock).forEach((key, i) => {
+                    const fill = document.getElementById('stockFill' + (i + 1));
+                    const text = document.getElementById('stockText' + (i + 1));
+                    if (!fill || !text) return;
+
+                    const units = stock[key];
+                    const pct = (units / maxStock) * 100;
+
+                    fill.style.width = pct + '%';
+                    fill.classList.remove('low', 'medium');
+                    text.classList.remove('low');
+
+                    if (units <= 4) {
+                        fill.classList.add('low');
+                        text.classList.add('low');
+                        text.textContent = '¡Solo ' + units + ' unid!';
+                    } else if (units <= 8) {
+                        fill.classList.add('medium');
+                        text.textContent = units + ' unidades';
+                    } else {
+                        text.textContent = units + ' unidades';
+                    }
+                });
+            }
+
+            window.decreaseStock = function(productKey) {
+                if (stock[productKey] && stock[productKey] > 1) {
+                    stock[productKey]--;
+                    saveStock();
+                    updateStockUI();
+                }
+            };
+
+            updateStockUI();
+        })();
+
+        /* ═══ COUNTDOWN TIMER (10 min — 10% discount) ═══ */
+        (function() {
+            const banner = document.getElementById('countdownBanner');
+            const timerEl = document.getElementById('countdownTimer');
+            const closeBtn = document.getElementById('countdownClose');
+            const DURATION = 10 * 60 * 1000; // 10 minutes
+            const STORAGE_KEY = 'leblon_countdown_start';
+
+            // Get or set the countdown start time
+            let startTime = parseInt(sessionStorage.getItem(STORAGE_KEY));
+            if (!startTime) {
+                startTime = Date.now();
+                sessionStorage.setItem(STORAGE_KEY, startTime.toString());
+            }
+
+            let bannerClosed = false;
+            closeBtn.addEventListener('click', () => {
+                banner.classList.remove('visible');
+                bannerClosed = true;
+            });
+
+            function updateCountdown() {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, DURATION - elapsed);
+
+                if (remaining <= 0) {
+                    timerEl.textContent = '00:00';
+                    // Timer expired — remove discount
+                    sessionStorage.setItem('leblon_discount_expired', '1');
+                    setTimeout(() => banner.classList.remove('visible'), 2000);
+                    return;
+                }
+
+                const mins = Math.floor(remaining / 60000);
+                const secs = Math.floor((remaining % 60000) / 1000);
+                timerEl.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+
+                requestAnimationFrame(updateCountdown);
+            }
+
+            // Show banner after 3 seconds
+            setTimeout(() => {
+                if (!bannerClosed) banner.classList.add('visible');
+            }, 3000);
+
+            updateCountdown();
+        })();
     </script>
 </body>
 </html>

@@ -586,6 +586,123 @@
         }
         .footer-mini-links a:hover { color: var(--text-secondary); }
 
+        /* ═══ Countdown Banner ═══ */
+        .countdown-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1206 0%, #2d1f0e 100%);
+            border-top: 1px solid rgba(201,169,98,0.4);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            z-index: 9997;
+            transform: translateY(100%);
+            transition: transform 0.6s var(--ease);
+            flex-wrap: wrap;
+        }
+        .countdown-banner.visible {
+            transform: translateY(0);
+        }
+        .countdown-banner-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+        }
+        .countdown-banner-icon i {
+            width: 20px;
+            height: 20px;
+        }
+        .countdown-banner-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .countdown-banner-text strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .countdown-timer {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201,169,98,0.15);
+            border: 1px solid rgba(201,169,98,0.3);
+            padding: 6px 14px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+        .countdown-banner-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s ease;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .countdown-banner-close:hover {
+            color: var(--text-primary);
+        }
+        @media (max-width: 600px) {
+            .countdown-banner {
+                padding: 10px 40px 10px 16px;
+                gap: 8px;
+            }
+            .countdown-banner-text {
+                font-size: 12px;
+            }
+            .countdown-timer {
+                font-size: 14px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* ═══ Discount Styles ═══ */
+        .discount-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(39, 174, 96, 0.15);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success);
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            animation: fadeInUp 0.5s var(--ease);
+        }
+        .discount-badge i {
+            width: 14px;
+            height: 14px;
+        }
+        .price-original {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 400;
+            margin-right: 8px;
+        }
+        .discount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--success);
+        }
+
         /* ═══ Tablet ═══ */
         @media (min-width: 768px) {
             .checkout-wrapper { padding: 100px 40px 48px; gap: 40px; }
@@ -789,6 +906,17 @@
         </div>
     </div>
 
+    <!-- ═══════════════ COUNTDOWN BANNER ═══════════════ -->
+    <div class="countdown-banner" id="countdownBanner">
+        <div class="countdown-banner-icon">
+            <i data-lucide="clock"></i>
+        </div>
+        <span class="countdown-banner-text">Tu <strong>10% OFF</strong> expira en <span class="countdown-timer" id="countdownTimer">10:00</span></span>
+        <button class="countdown-banner-close" id="countdownClose" aria-label="Cerrar">
+            <i data-lucide="x" style="width:14px;height:14px"></i>
+        </button>
+    </div>
+
     <!-- Footer Mini -->
     <div class="footer-mini">
         <div class="footer-mini-logo">
@@ -821,6 +949,63 @@
             document.getElementById('productImage').alt = products[productKey].name;
         }
 
+        /* ═══ Countdown Timer & Discount ═══ */
+        const DURATION = 10 * 60 * 1000;
+        const STORAGE_KEY = 'leblon_countdown_start';
+        let discountActive = false;
+
+        (function() {
+            const banner = document.getElementById('countdownBanner');
+            const timerEl = document.getElementById('countdownTimer');
+            const closeBtn = document.getElementById('countdownClose');
+
+            let startTime = parseInt(sessionStorage.getItem(STORAGE_KEY));
+            if (!startTime) {
+                startTime = Date.now();
+                sessionStorage.setItem(STORAGE_KEY, startTime.toString());
+            }
+
+            const expired = sessionStorage.getItem('leblon_discount_expired');
+            if (expired) {
+                discountActive = false;
+            } else {
+                const elapsed = Date.now() - startTime;
+                discountActive = elapsed < DURATION;
+            }
+
+            let bannerClosed = false;
+            closeBtn.addEventListener('click', () => {
+                banner.classList.remove('visible');
+                bannerClosed = true;
+            });
+
+            function updateCountdown() {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, DURATION - elapsed);
+
+                if (remaining <= 0) {
+                    timerEl.textContent = '00:00';
+                    discountActive = false;
+                    sessionStorage.setItem('leblon_discount_expired', '1');
+                    updateTotal();
+                    setTimeout(() => banner.classList.remove('visible'), 2000);
+                    return;
+                }
+
+                discountActive = true;
+                const mins = Math.floor(remaining / 60000);
+                const secs = Math.floor((remaining % 60000) / 1000);
+                timerEl.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+                requestAnimationFrame(updateCountdown);
+            }
+
+            setTimeout(() => {
+                if (!bannerClosed && discountActive) banner.classList.add('visible');
+            }, 1000);
+
+            updateCountdown();
+        })();
+
         /* ═══ Quantity controls ═══ */
         let qty = 1;
         const PRICE = 40000;
@@ -828,9 +1013,45 @@
         const totalPrice = document.getElementById('totalPrice');
 
         function updateTotal() {
-            const total = qty * PRICE;
-            totalPrice.textContent = '$' + total.toLocaleString('es-AR');
+            const baseTotal = qty * PRICE;
+            const orderTotalDiv = document.querySelector('.order-total');
+
+            // Remove old discount row if exists
+            const oldDiscountRow = document.getElementById('discountRow');
+            if (oldDiscountRow) oldDiscountRow.remove();
+            const oldBadge = document.getElementById('discountBadge');
+            if (oldBadge) oldBadge.remove();
+
+            if (discountActive) {
+                const discount = Math.round(baseTotal * 0.10);
+                const finalTotal = baseTotal - discount;
+
+                totalPrice.innerHTML = '<span class="price-original">$' + baseTotal.toLocaleString('es-AR') + '</span> $' + finalTotal.toLocaleString('es-AR');
+
+                // Add discount row before the total
+                const discountEl = document.createElement('div');
+                discountEl.id = 'discountRow';
+                discountEl.className = 'discount-row';
+                discountEl.innerHTML = '<span>Descuento 10%</span><span>-$' + discount.toLocaleString('es-AR') + '</span>';
+                orderTotalDiv.parentNode.insertBefore(discountEl, orderTotalDiv);
+
+                // Add discount badge after order item
+                const orderItem = document.getElementById('orderItem');
+                if (!document.getElementById('discountBadge')) {
+                    const badge = document.createElement('div');
+                    badge.id = 'discountBadge';
+                    badge.className = 'discount-badge';
+                    badge.innerHTML = '<i data-lucide="percent"></i> 10% OFF aplicado';
+                    orderItem.parentNode.insertBefore(badge, orderItem.nextSibling);
+                    lucide.createIcons();
+                }
+            } else {
+                totalPrice.textContent = '$' + baseTotal.toLocaleString('es-AR');
+            }
         }
+
+        // Initial price update (applies discount if active)
+        updateTotal();
 
         document.getElementById('qtyMinus').addEventListener('click', () => {
             if (qty > 1) { qty--; qtyValue.textContent = qty; updateTotal(); }
@@ -912,10 +1133,14 @@
             /* Show success */
             const overlay = document.getElementById('successOverlay');
             const details = document.getElementById('successDetails');
+            const baseTotal = qty * PRICE;
+            const finalTotal = discountActive ? baseTotal - Math.round(baseTotal * 0.10) : baseTotal;
+            const finalTotalStr = '$' + finalTotal.toLocaleString('es-AR');
             details.innerHTML =
                 '<div class="success-detail-row"><span class="success-detail-label">Producto</span><span class="success-detail-value">' + document.getElementById('productName').textContent + '</span></div>' +
                 '<div class="success-detail-row"><span class="success-detail-label">Cantidad</span><span class="success-detail-value">' + qty + '</span></div>' +
-                '<div class="success-detail-row"><span class="success-detail-label">Total</span><span class="success-detail-value">' + totalPrice.textContent + '</span></div>' +
+                (discountActive ? '<div class="success-detail-row"><span class="success-detail-label">Descuento</span><span class="success-detail-value" style="color:var(--success)">10% OFF</span></div>' : '') +
+                '<div class="success-detail-row"><span class="success-detail-label">Total</span><span class="success-detail-value">' + finalTotalStr + '</span></div>' +
                 '<div class="success-detail-row"><span class="success-detail-label">Nombre</span><span class="success-detail-value">' + fields.nombre.el.value + ' ' + fields.apellido.el.value + '</span></div>' +
                 '<div class="success-detail-row"><span class="success-detail-label">Email</span><span class="success-detail-value">' + fields.email.el.value + '</span></div>';
 
