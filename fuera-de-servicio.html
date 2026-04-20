@@ -13,6 +13,21 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1443683756970952');
     fbq('track', 'PageView');
+    (function(){
+        var productos = {
+            'reserva-especial': 'Leblon Reserva Especial',
+            'clasico-intenso':  'Leblon Clásico Intenso',
+            'single-origin':    'Leblon Single Origin'
+        };
+        var id = new URLSearchParams(location.search).get('producto');
+        var data = { value: 40000, currency: 'ARS' };
+        if (id && productos[id]) {
+            data.content_name = productos[id];
+            data.content_ids  = [id];
+            data.content_type = 'product';
+        }
+        fbq('track', 'Purchase', data);
+    })();
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1443683756970952&ev=PageView&noscript=1"
