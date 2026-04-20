@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1443683756970952');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1443683756970952&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Café Leblon | Café Premium Brasileño de Origen</title>
@@ -1049,7 +1067,9 @@
                 padding: 4px 10px;
             }
             .countdown-banner-cta {
-                display: none;
+                font-size: 11px;
+                padding: 6px 14px;
+                white-space: nowrap;
             }
         }
 
@@ -1372,53 +1392,6 @@
         .footer-social a:hover { color: var(--gold); transform: translateY(-3px); }
         .footer-social i { width: 20px; height: 20px; }
 
-        .footer-newsletter {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            position: relative;
-            z-index: 1;
-        }
-        .footer-nl-text h3 {
-            font-family: var(--font-display);
-            font-size: 20px; font-weight: 500;
-            color: #FFFFFF; margin-bottom: 8px;
-        }
-        .footer-nl-text p {
-            font-size: 13px; font-weight: 400;
-            color: var(--text-muted);
-        }
-        .footer-nl-form { display: flex; width: 100%; }
-        .footer-nl-input {
-            flex: 1;
-            height: 48px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-right: none;
-            padding: 0 16px;
-            font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--text-primary);
-            outline: none;
-            min-width: 0;
-            transition: border-color 0.3s ease;
-        }
-        .footer-nl-input::placeholder { color: var(--text-muted); }
-        .footer-nl-input:focus { border-color: var(--gold); }
-        .footer-nl-btn {
-            height: 48px;
-            background: var(--gold);
-            color: var(--bg);
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 1px;
-            padding: 0 20px;
-            white-space: nowrap;
-            transition: background 0.3s ease;
-        }
-        .footer-nl-btn:hover { background: var(--gold-light); }
-
         .footer-bottom-divider { height: 1px; background: var(--border); position: relative; z-index: 1; }
         .footer-copyright {
             display: flex;
@@ -1520,11 +1493,7 @@
             .footer-content { padding: 48px 40px 36px; gap: 40px; }
             .footer-watermark { font-size: 72px; letter-spacing: 14px; }
             .footer-nav-columns { grid-template-columns: repeat(3, 1fr); gap: 32px; }
-            .footer-newsletter { flex-direction: row; align-items: center; justify-content: space-between; gap: 32px; }
-            .footer-nl-form { width: auto; }
-            .footer-nl-input { width: 240px; flex: none; }
-            .footer-nl-btn { padding: 0 24px; font-size: 12px; }
-            .footer-copyright { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.footer-copyright { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
             .footer-legal { flex-direction: row; gap: 20px; }
         }
 
@@ -1727,7 +1696,7 @@
                 <li><a href="#experiencia">Experiencia</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
-            <a href="comprar.html" class="nav-cta">Comprar</a>
+            <a href="fuera-de-servicio.html" class="nav-cta">Comprar</a>
             <button class="nav-hamburger" id="hamburger" aria-label="Abrir menu">
                 <span></span>
                 <span></span>
@@ -1742,7 +1711,7 @@
         <a href="#productos" class="mobile-link">Productos</a>
         <a href="#experiencia" class="mobile-link">Experiencia</a>
         <a href="#contacto" class="mobile-link">Contacto</a>
-        <a href="comprar.html" class="mobile-cta">Comprar Ahora</a>
+        <a href="fuera-de-servicio.html" class="mobile-cta">Comprar Ahora</a>
     </div>
 
     <!-- ═══════════════ HERO ═══════════════ -->
@@ -1756,7 +1725,7 @@
                 <h1 class="hero-headline reveal reveal-delay-1">El Arte del<br>Café <span class="gold">Brasileño</span></h1>
                 <p class="hero-subheadline reveal reveal-delay-2">Desde las tierras altas de Minas Gerais, el café más exclusivo de Brasil llega a Argentina. Cada grano, una obra maestra.</p>
                 <div class="hero-ctas reveal reveal-delay-3">
-                    <a href="comprar.html" class="btn-primary">Comprá Ahora</a>
+                    <a href="fuera-de-servicio.html" class="btn-primary">Comprá Ahora</a>
                     <button class="btn-secondary" onclick="document.getElementById('origen').scrollIntoView({behavior:'smooth'})">Conocé el Origen</button>
                 </div>
             </div>
@@ -1878,7 +1847,7 @@
                                 <span class="price-label">250g</span>
                                 $40.000
                             </div>
-                            <a href="comprar.html?producto=reserva-especial" class="product-card-cta">
+                            <a href="fuera-de-servicio.html?producto=reserva-especial" class="product-card-cta">
                                 Comprar <i data-lucide="arrow-right" style="width:14px;height:14px"></i>
                             </a>
                         </div>
@@ -1900,7 +1869,7 @@
                                 <span class="price-label">250g</span>
                                 $40.000
                             </div>
-                            <a href="comprar.html?producto=clasico-intenso" class="product-card-cta">
+                            <a href="fuera-de-servicio.html?producto=clasico-intenso" class="product-card-cta">
                                 Comprar <i data-lucide="arrow-right" style="width:14px;height:14px"></i>
                             </a>
                         </div>
@@ -1922,7 +1891,7 @@
                                 <span class="price-label">200g</span>
                                 $40.000
                             </div>
-                            <a href="comprar.html?producto=single-origin" class="product-card-cta">
+                            <a href="fuera-de-servicio.html?producto=single-origin" class="product-card-cta">
                                 Comprar <i data-lucide="arrow-right" style="width:14px;height:14px"></i>
                             </a>
                         </div>
@@ -2032,7 +2001,7 @@
             <div class="final-cta">
                 <h2 class="final-cta-headline reveal">Elevá Tu Ritual del Café</h2>
                 <p class="final-cta-subline reveal reveal-delay-1">Descubrí la diferencia de un café de origen único, tostado artesanalmente para los paladares más exigentes.</p>
-                <a href="comprar.html" class="final-cta-btn reveal reveal-delay-2">Comprá Ahora</a>
+                <a href="fuera-de-servicio.html" class="final-cta-btn reveal reveal-delay-2">Comprá Ahora</a>
                 <p class="final-cta-shipping reveal reveal-delay-3">Envío gratis a todo el país en compras superiores a $15.000</p>
             </div>
         </div>
@@ -2057,9 +2026,9 @@
                     <div class="footer-nav-col">
                         <h4>PRODUCTOS</h4>
                         <ul>
-                            <li><a href="comprar.html?producto=reserva-especial">Reserva Especial</a></li>
-                            <li><a href="comprar.html?producto=clasico-intenso">Clásico Intenso</a></li>
-                            <li><a href="comprar.html?producto=single-origin">Single Origin</a></li>
+                            <li><a href="fuera-de-servicio.html?producto=reserva-especial">Reserva Especial</a></li>
+                            <li><a href="fuera-de-servicio.html?producto=clasico-intenso">Clásico Intenso</a></li>
+                            <li><a href="fuera-de-servicio.html?producto=single-origin">Single Origin</a></li>
                             <li><a href="#">Accesorios</a></li>
                         </ul>
                     </div>
@@ -2108,17 +2077,6 @@
                 </div>
             </div>
 
-            <div class="footer-newsletter">
-                <div class="footer-nl-text">
-                    <h3>Suscribite a Nuestra Newsletter</h3>
-                    <p>Recibí ofertas exclusivas, nuevos blends y consejos de baristas.</p>
-                </div>
-                <form class="footer-nl-form" onsubmit="event.preventDefault(); this.querySelector('input').value='¡Gracias por suscribirte!'; this.querySelector('input').disabled=true; this.querySelector('button').textContent='LISTO';">
-                    <input type="email" class="footer-nl-input" placeholder="Tu email" required>
-                    <button type="submit" class="footer-nl-btn">SUSCRIBIRSE</button>
-                </form>
-            </div>
-
             <div class="footer-bottom-divider"></div>
 
             <div class="footer-copyright">
@@ -2156,7 +2114,7 @@
             <i data-lucide="clock"></i>
         </div>
         <span class="countdown-banner-text">Comprá en los próximos <span class="countdown-timer" id="countdownTimer">10:00</span> y obtené <strong>10% OFF</strong></span>
-        <a href="comprar.html" class="countdown-banner-cta">COMPRAR AHORA</a>
+        <a href="fuera-de-servicio.html" class="countdown-banner-cta">COMPRAR AHORA</a>
         <button class="countdown-banner-close" id="countdownClose" aria-label="Cerrar">
             <i data-lucide="x" style="width:14px;height:14px"></i>
         </button>

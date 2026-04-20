@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1443683756970952');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1443683756970952&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comprar | Café Leblon — Café Premium Brasileño</title>
@@ -815,32 +833,32 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label" for="nombre">Nombre</label>
-                            <input type="text" id="nombre" class="form-input" placeholder="Tu nombre" required minlength="2" autocomplete="given-name">
-                            <span class="form-error" id="errorNombre">Ingresá tu nombre</span>
+                            <input type="text" id="nombre" class="form-input" placeholder="Tu nombre" required minlength="2" autocomplete="given-name" pattern=".*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ].*">
+                            <span class="form-error" id="errorNombre" data-msg="Ingresá un nombre válido (no puede ser solo números)">Ingresá un nombre válido (no puede ser solo números)</span>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="apellido">Apellido</label>
-                            <input type="text" id="apellido" class="form-input" placeholder="Tu apellido" required minlength="2" autocomplete="family-name">
-                            <span class="form-error" id="errorApellido">Ingresá tu apellido</span>
+                            <input type="text" id="apellido" class="form-input" placeholder="Tu apellido" required minlength="2" autocomplete="family-name" pattern=".*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ].*">
+                            <span class="form-error" id="errorApellido" data-msg="Ingresá un apellido válido (no puede ser solo números)">Ingresá un apellido válido (no puede ser solo números)</span>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="dni">DNI</label>
                             <input type="text" id="dni" class="form-input" placeholder="12.345.678" required pattern="[\d.]{7,11}" inputmode="numeric" autocomplete="off">
-                            <span class="form-error" id="errorDni">Ingresá un DNI válido (solo números)</span>
+                            <span class="form-error" id="errorDni" data-msg="Ingresá un DNI válido (solo números)">Ingresá un DNI válido (solo números)</span>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="celular">Celular</label>
                             <input type="tel" id="celular" class="form-input" placeholder="+54 11 1234-5678" required minlength="8" autocomplete="tel">
-                            <span class="form-error" id="errorCelular">Ingresá un número de celular válido</span>
+                            <span class="form-error" id="errorCelular" data-msg="Ingresá un número de celular válido">Ingresá un número de celular válido</span>
                         </div>
 
                         <div class="form-group full-width">
                             <label class="form-label" for="email">Email</label>
                             <input type="email" id="email" class="form-input" placeholder="tu@email.com" required autocomplete="email">
-                            <span class="form-error" id="errorEmail">Ingresá un email válido</span>
+                            <span class="form-error" id="errorEmail" data-msg="Ingresá un email válido">Ingresá un email válido</span>
                         </div>
                     </div>
 
@@ -1090,14 +1108,16 @@
             email: { el: document.getElementById('email'), error: document.getElementById('errorEmail') }
         };
 
-        function validateField(key) {
+        function validateField(key, showEmpty) {
             const f = fields[key];
             let valid = false;
+            const isEmpty = f.el.value.trim().length === 0;
 
             switch (key) {
                 case 'nombre':
                 case 'apellido':
-                    valid = f.el.value.trim().length >= 2;
+                    const val = f.el.value.trim();
+                    valid = val.length >= 2 && /[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]/.test(val);
                     break;
                 case 'dni':
                     const dniClean = f.el.value.replace(/\./g, '');
@@ -1112,18 +1132,27 @@
                     break;
             }
 
-            f.el.classList.toggle('error', !valid && f.el.value.length > 0);
+            const showError = !valid && (showEmpty || f.el.value.length > 0);
+            f.el.classList.toggle('error', showError);
             f.el.classList.toggle('valid', valid);
-            f.error.classList.toggle('visible', !valid && f.el.value.length > 0);
+            f.error.textContent = isEmpty && showEmpty ? 'Este campo es obligatorio' : f.error.dataset.msg || f.error.textContent;
+            f.error.classList.toggle('visible', showError);
             return valid;
         }
 
         /* Real-time validation on blur */
         Object.keys(fields).forEach(key => {
-            fields[key].el.addEventListener('blur', () => validateField(key));
+            fields[key].el.addEventListener('blur', () => validateField(key, true));
             fields[key].el.addEventListener('input', () => {
-                if (fields[key].el.classList.contains('error')) validateField(key);
+                if (fields[key].el.classList.contains('error')) validateField(key, true);
             });
+        });
+
+        /* DNI: solo permitir números */
+        fields.dni.el.addEventListener('keypress', function(e) {
+            if (!/\d/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Tab' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                e.preventDefault();
+            }
         });
 
         /* DNI auto-format */
@@ -1141,7 +1170,7 @@
 
             let allValid = true;
             Object.keys(fields).forEach(key => {
-                if (!validateField(key)) allValid = false;
+                if (!validateField(key, true)) allValid = false;
             });
 
             if (!allValid) {
