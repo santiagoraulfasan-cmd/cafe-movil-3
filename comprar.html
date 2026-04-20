@@ -1185,6 +1185,16 @@
             const baseTotal = qty * PRICE;
             const finalTotal = discountActive ? baseTotal - Math.round(baseTotal * 0.10) : baseTotal;
             const finalTotalStr = '$' + finalTotal.toLocaleString('es-AR');
+
+            if (typeof fbq === 'function') {
+                fbq('track', 'Purchase', {
+                    value: finalTotal,
+                    currency: 'ARS',
+                    content_name: document.getElementById('productName').textContent,
+                    contents: [{id: (new URLSearchParams(location.search).get('producto') || 'leblon'), quantity: qty}],
+                    content_type: 'product'
+                });
+            }
             details.innerHTML =
                 '<div class="success-detail-row"><span class="success-detail-label">Producto</span><span class="success-detail-value">' + document.getElementById('productName').textContent + '</span></div>' +
                 '<div class="success-detail-row"><span class="success-detail-label">Cantidad</span><span class="success-detail-value">' + qty + '</span></div>' +
